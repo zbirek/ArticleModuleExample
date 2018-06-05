@@ -27,30 +27,30 @@ class ModifyArticleCommand implements Command
 	private $match;
 	private $gallery;
 	private $tags;
-    /**
-     * @var int
-     */
-    private $priority;
-    /**
-     * @var bool
-     */
-    private $showMain;
+	/**
+	 * @var int
+	 */
+	private $priority;
+	/**
+	 * @var bool
+	 */
+	private $showMain;
 
-    public function __construct(
+	public function __construct(
 		UuidInterface $uuid,
 		string $title,
 		string $subtitle,
 		string $perex,
 		string $content,
-		string  $releaseDate,
+		string $releaseDate,
 		int $release,
 		string $author,
 		string $image,
 		string $match = null,
 		string $gallery = null,
 		$tags = [],
-        int $priority = 1,
-        bool $showMain = true
+		int $priority = 1,
+		bool $showMain = true
 	)
 	{
 		$this->id = $uuid;
@@ -65,64 +65,78 @@ class ModifyArticleCommand implements Command
 		$this->match = $match;
 		$this->gallery = $gallery;
 		$this->tags = $tags;
-        $this->priority = $priority;
-        $this->showMain = $showMain;
-    }
+		$this->priority = $priority;
+		$this->showMain = $showMain;
+	}
 
-	public function id() {
+	public function id()
+	{
 		return $this->id;
 	}
 
-	public function title() {
+	public function title()
+	{
 		return $this->title;
 	}
 
-	public function subtitle() {
+	public function subtitle()
+	{
 		return $this->subtitle;
 	}
 
-	public function perex() {
+	public function perex()
+	{
 		return $this->perex;
 	}
 
-	public function content() {
+	public function content()
+	{
 		return $this->content;
 	}
 
-	public function releaseDate() {
+	public function releaseDate()
+	{
 		return $this->releaseDate;
 	}
 
-	public function release() {
+	public function release()
+	{
 		return $this->release;
 	}
 
-	public function author() {
+	public function author()
+	{
 		return $this->author;
 	}
 
-	public function image() {
+	public function image()
+	{
 		return $this->image;
 	}
 
-	public function match() {
+	public function match()
+	{
 		return $this->match;
 	}
 
-	public function gallery() {
+	public function gallery()
+	{
 		return $this->gallery;
 	}
 
-	public function tags() {
+	public function tags()
+	{
 		return $this->tags;
 	}
 
-	public function showMain() {
-        return $this->showMain;
-    }
+	public function showMain()
+	{
+		return $this->showMain;
+	}
 
-    public function priority() {
-        return $this->priority;
-    }
+	public function priority()
+	{
+		return $this->priority;
+	}
 
 }

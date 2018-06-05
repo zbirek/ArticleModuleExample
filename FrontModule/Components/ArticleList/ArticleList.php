@@ -19,19 +19,20 @@ class ArticleList extends Control
 	private $articleLimit;
 
 	private $articleQuery;
-    /**
-     * @var int
-     */
-    private $offset;
+	/**
+	 * @var int
+	 */
+	private $offset;
 
-    public function __construct($limit, $offset = 0,ArticleQuery $articleQuery)
+	public function __construct($limit, $offset = 0, ArticleQuery $articleQuery)
 	{
 		$this->articleLimit = $limit;
 		$this->articleQuery = $articleQuery;
-        $this->offset = $offset;
-    }
+		$this->offset = $offset;
+	}
 
-	public function render() {
+	public function render()
+	{
 		$template = $this->getTemplate();
 		$template->setFile(__DIR__ . "/list.latte");
 
@@ -42,7 +43,8 @@ class ArticleList extends Control
 		$template->render();
 	}
 
-	public function renderWidget() {
+	public function renderWidget()
+	{
 		$template = $this->getTemplate();
 		$template->setFile(__DIR__ . "/widget.latte");
 
@@ -51,18 +53,20 @@ class ArticleList extends Control
 		$template->render();
 	}
 
-	public function renderOther() {
-        $template = $this->getTemplate();
-        $template->setFile(__DIR__ . '/other.latte');
+	public function renderOther()
+	{
+		$template = $this->getTemplate();
+		$template->setFile(__DIR__ . '/other.latte');
 
-        $articles = $this->articleQuery->articleList($this->articleLimit, $this->offset);
-        $template->articles = $articles;
-        $template->render();
-    }
+		$articles = $this->articleQuery->articleList($this->articleLimit, $this->offset);
+		$template->articles = $articles;
+		$template->render();
+	}
 
 }
 
-interface IArticleListFactory {
+interface IArticleListFactory
+{
 
 	/** @return ArticleList */
 	public function create($limit = 3, $offset = 0);

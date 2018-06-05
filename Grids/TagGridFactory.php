@@ -32,10 +32,10 @@ class TagGridFactory
 	private $uuidFactory;
 
 	public function __construct(
-			GridFactory $gridFactory,
-			TagQuery $tagQuery,
-			CommandBus $commandBus,
-			UuidFactory $uuidFactory
+		GridFactory $gridFactory,
+		TagQuery $tagQuery,
+		CommandBus $commandBus,
+		UuidFactory $uuidFactory
 	)
 	{
 		$this->gridFactory = $gridFactory;
@@ -44,7 +44,7 @@ class TagGridFactory
 		$this->uuidFactory = $uuidFactory;
 	}
 
-	public function createGrid(callable  $onSuccessAdd, callable  $onSuccessEdit)
+	public function createGrid(callable $onSuccessAdd, callable $onSuccessEdit)
 	{
 		$grid = $this->gridFactory->create();
 
@@ -54,20 +54,20 @@ class TagGridFactory
 		//$grid->addColumnText('id', 'Id');
 
 		$grid->addColumnText('tag', 'Tag')
-				->setSortable();
+			->setSortable();
 
 		$grid->addInlineAdd()
-				->setText('Přidat tag')
-				->setClass('btn btn-success')
-				->setPositionTop()
-				->onControlAdd[] = function ($container) {
+			->setText('Přidat tag')
+			->setClass('btn btn-success')
+			->setPositionTop()
+			->onControlAdd[] = function ($container) {
 			$container->addText('tag');
 		};
 
 		$grid->addInlineEdit()
-				->setClass('btn btn-success ajax')
-				->setTitle('Upravit tag')
-				->onControlAdd[] = function ($container) {
+			->setClass('btn btn-success ajax')
+			->setTitle('Upravit tag')
+			->onControlAdd[] = function ($container) {
 			$container->addText('tag', '');
 		};
 
@@ -80,14 +80,14 @@ class TagGridFactory
 		};
 
 		$grid->getInlineEdit()
-				->onSetDefaults[] = function ($container, $item) {
+			->onSetDefaults[] = function ($container, $item) {
 			$container->setDefaults([
-					'tag' => $item->tag()
+				'tag' => $item->tag()
 			]);
 		};
 
 		$grid->getInlineEdit()
-				->onSubmit[] = function ($id, $values) use ($onSuccessEdit) {
+			->onSubmit[] = function ($id, $values) use ($onSuccessEdit) {
 			$uuid = $this->uuidFactory->uuidFromString($id);
 			$command = new ModifyTagCommand($uuid, $values->tag);
 

@@ -64,7 +64,8 @@ class Tag extends Object
 		return $this->id;
 	}
 
-	public function getId() {
+	public function getId()
+	{
 		return $this->id->toString();
 	}
 
@@ -76,7 +77,8 @@ class Tag extends Object
 		return $this->tag;
 	}
 
-	public function articles() {
+	public function articles()
+	{
 		return $this->articles;
 	}
 

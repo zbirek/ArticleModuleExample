@@ -1,4 +1,5 @@
 <?php
+
 namespace AdminModule;
 
 use AdminModule\Components\ArticleForm;
@@ -18,7 +19,7 @@ use ArticleModule\Query\ArticleQuery;
 use LiteCQRS\Commanding\CommandBus;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Form,
-		Nette\Utils\Strings;
+	Nette\Utils\Strings;
 use Nette\Utils\Paginator;
 use ondrs\UploadManager\Upload;
 use Ramsey\Uuid\Uuid;
@@ -47,11 +48,11 @@ class ArticlePresenter extends DefaultPresenter
 	private $articleQuery;
 
 	public function __construct(
-        CommandBus $commandBus,
-        UuidFactory $uuidFactory,
-        ArticleFormFactory $articleFormFactory,
-        ArticleGridFactory $articleGridFactory,
-        ArticleQuery $articleQuery
+		CommandBus $commandBus,
+		UuidFactory $uuidFactory,
+		ArticleFormFactory $articleFormFactory,
+		ArticleGridFactory $articleGridFactory,
+		ArticleQuery $articleQuery
 	)
 	{
 		$this->commandBus = $commandBus;
@@ -61,10 +62,11 @@ class ArticlePresenter extends DefaultPresenter
 		$this->articleQuery = $articleQuery;
 	}
 
-    /**
-     *
-     */
-	public function actionAddArticle() {
+	/**
+	 *
+	 */
+	public function actionAddArticle()
+	{
 		$this['addArticleForm']->setDefaults(
 			['author' => "{$this->user->identity->firstName} {$this->user->identity->lastName}"]
 		);
@@ -88,16 +90,16 @@ class ArticlePresenter extends DefaultPresenter
 			'gallery' => $article->gallery(),
 			'author' => $article->author(),
 			'tags' => $article->tags(),
-            'showMain' => $article->showMain(),
-            'priority' => $article->priority()
+			'showMain' => $article->showMain(),
+			'priority' => $article->priority()
 		]);
 		$this->template->article = $article;
 	}
 
 
-    /**
-     * @return \Ublaboo\DataGrid\DataGrid
-     */
+	/**
+	 * @return \Ublaboo\DataGrid\DataGrid
+	 */
 	public function createComponentArticleGrid()
 	{
 		return $this->articleGridFactory->createGrid();
@@ -116,29 +118,29 @@ class ArticlePresenter extends DefaultPresenter
 			$image = $values->uploadImage->isOk() ? $values->uploadImage : $values->image;
 
 			$command = new CreateArticleCommand(
-					$uuid,
-					$values->title,
-					$values->subtitle,
-					$values->perex,
-					$values->content,
-					$values->releaseDate,
-					$values->release,
-					$values->author,
-					$this->user->getId(),
-					$image,
-					$values->match,
-					$values->gallery,
-					$values->tags,
-                    $values->priority,
-                    $values->showMain
+				$uuid,
+				$values->title,
+				$values->subtitle,
+				$values->perex,
+				$values->content,
+				$values->releaseDate,
+				$values->release,
+				$values->author,
+				$this->user->getId(),
+				$image,
+				$values->match,
+				$values->gallery,
+				$values->tags,
+				$values->priority,
+				$values->showMain
 			);
 
 			$this->commandBus->handle($command);
 			$this->flashMessage('Článek byl přidán', 'success');
 
-			if($form->isSubmitted()->name == 'saveStay') {
+			if ($form->isSubmitted()->name == 'saveStay') {
 				$this->redirect('editArticle', $uuid);
-			} else{
+			} else {
 				$this->redirect('default');
 			}
 		};
@@ -147,9 +149,9 @@ class ArticlePresenter extends DefaultPresenter
 		return $form;
 	}
 
-    /**
-     * @return Form
-     */
+	/**
+	 * @return Form
+	 */
 	public function createComponentEditArticleForm()
 	{
 		$form = $this->articleFormFactory->createForm();
@@ -159,28 +161,28 @@ class ArticlePresenter extends DefaultPresenter
 			$tags = $this->uuidFactory->uuidArray($values->tags);
 
 			$command = new ModifyArticleCommand(
-					$uuid,
-					$values->title,
-					$values->subtitle,
-					$values->perex,
-					$values->content,
-					$values->releaseDate,
-					$values->release,
-					$values->author,
-					$image,
-					$values->match,
-					$values->gallery,
-					$tags,
-                    $values->priority,
-                    $values->showMain
+				$uuid,
+				$values->title,
+				$values->subtitle,
+				$values->perex,
+				$values->content,
+				$values->releaseDate,
+				$values->release,
+				$values->author,
+				$image,
+				$values->match,
+				$values->gallery,
+				$tags,
+				$values->priority,
+				$values->showMain
 			);
 
 			$this->commandBus->handle($command);
 			$this->flashMessage('Článek byl upraven', 'success');
 
-			if($form->isSubmitted()->name == 'saveStay') {
+			if ($form->isSubmitted()->name == 'saveStay') {
 				$this->redirect('editArticle', $uuid);
-			} else{
+			} else {
 				$this->redirect('default');
 			}
 		};
@@ -197,7 +199,7 @@ class ArticlePresenter extends DefaultPresenter
 		$matches = $this['addArticle']->getMatches($value);
 
 		$this['addArticle']['idmatch']->setPrompt('Vyber sezonu')
-				->setItems($matches);
+			->setItems($matches);
 
 		$this->redrawControl('match');
 	}
@@ -264,7 +266,7 @@ class ArticlePresenter extends DefaultPresenter
 		$this->em->remove($article);
 		$this->em->flush();
 
-		$this['articleGrid']->reloaOd(['grid','flashMessages']);
+		$this['articleGrid']->reloaOd(['grid', 'flashMessages']);
 		$this->terminate();
 	}
 

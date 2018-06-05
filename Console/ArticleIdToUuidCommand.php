@@ -77,7 +77,7 @@ class ArticleIdToUuidCommand extends Command
 	public function configure()
 	{
 		$this->setName('article:convertId')
-				->setDescription('Convert article ID to uuid');
+			->setDescription('Convert article ID to uuid');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -89,18 +89,18 @@ class ArticleIdToUuidCommand extends Command
 
 		$teamsDb = $this->db->table('team')->fetchAssoc('id');
 		$teams = [];
-		foreach($teamsDb as $t) {
+		foreach ($teamsDb as $t) {
 			$uuid = $this->uuidFactory->uuid();
 			$teamCommand = new CreateTeamCommand($uuid, $t['name'], $t['short_name']);
 			$teams[$t['id']] = $teamCommand;
 
-			$team = new Team($teamCommand->id(), $teamCommand->name(), $teamCommand->shortName(), "logo/".$t['logo'], $t['facr'], $t['id']);
+			$team = new Team($teamCommand->id(), $teamCommand->name(), $teamCommand->shortName(), "logo/" . $t['logo'], $t['facr'], $t['id']);
 			$this->em->persist($team);
 			$this->em->flush();
 		}
 
 		$teamCategory = [];
-		foreach($this->db->table('team_category') as $tc) {
+		foreach ($this->db->table('team_category') as $tc) {
 			$uuid = $this->uuidFactory->uuid();
 			$category = new TeamCategory($uuid, $tc->name, $tc->uri);
 			$teamCategory[$tc->id] = new CreateTeamCategoryCommand($uuid, $tc->name, $tc->uri);
@@ -110,7 +110,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		$leagues = [];
-		foreach($this->db->table('league') as $l) {
+		foreach ($this->db->table('league') as $l) {
 			$uuid = $this->uuidFactory->uuid();
 			$leagueCommand = new CreateLeagueCommand($uuid, $l->name, $teamCategory[$l->team_category_id]->id());
 			$tc = $this->em->getRepository(TeamCategory::class)->find($teamCategory[$l->team_category_id]->id());
@@ -121,7 +121,7 @@ class ArticleIdToUuidCommand extends Command
 			$this->em->flush();
 		}
 		$seasons = [];
-		foreach($this->db->table('season') as $s) {
+		foreach ($this->db->table('season') as $s) {
 			$uuid = $this->uuidFactory->uuid();
 			$seasonCommand = new CreateSeasonCommand($uuid, $leagues[$s->league_id]->id(), $s->start_season, $s->end_season, $s->id);
 			$seasons[$s->id] = $seasonCommand;
@@ -129,7 +129,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		$positions = [];
-		foreach($this->db->table('position') as $p) {
+		foreach ($this->db->table('position') as $p) {
 			$uuid = $this->uuidFactory->uuid();
 			$positionCommand = new Position($uuid, $p->name, $p->priority, $p->id);
 			$positions[$p->id] = new CreatePositionCommand($uuid, $p->name, $p->priority);
@@ -139,18 +139,18 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		$players = [];
-		foreach($this->db->table('player') as $pl) {
+		foreach ($this->db->table('player') as $pl) {
 			$uuid = $this->uuidFactory->uuid();
 			//dump($pl->birth->getTimestamp());
 			$playerCommand = new CreatePlayerCommand($uuid,
 				$pl->name,
 				$pl->surname,
 				$pl->position_id ? $positions[$pl->position_id]->id() : NULL,
-				isset($pl->birth) && $pl->birth->getTimestamp()!=-62169987600 ? $pl->birth : NULL ,
+				isset($pl->birth) && $pl->birth->getTimestamp() != -62169987600 ? $pl->birth : NULL,
 				NULL,
 				$pl->facr);
 			$pos = $pl->position_id ? $this->em->getRepository(Position::class)->find($playerCommand->position()) : NULL;
-			$player = new Player($uuid, $playerCommand->name(), $playerCommand->surname(), $pos, new DateTime($playerCommand->birth()), "photo/".$pl->photo, $playerCommand->facrId(), $pl->archive, $pl->id);
+			$player = new Player($uuid, $playerCommand->name(), $playerCommand->surname(), $pos, new DateTime($playerCommand->birth()), "photo/" . $pl->photo, $playerCommand->facrId(), $pl->archive, $pl->id);
 			$players[$pl->id] = $playerCommand;
 
 			$this->em->persist($player);
@@ -159,7 +159,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		$matches = [];
-		foreach($this->db->table('match') as $m) {
+		foreach ($this->db->table('match') as $m) {
 			$uuid = $this->uuidFactory->uuid();
 			$matchCommand = new CreateMatchCommand(
 				$uuid,
@@ -175,7 +175,7 @@ class ArticleIdToUuidCommand extends Command
 			$ht = $this->em->getRepository(Team::class)->find($matchCommand->homeTeam());
 			$gt = $this->em->getRepository(Team::class)->find($matchCommand->guestTeam());
 			$se = $this->em->getRepository(Season::class)->find($matchCommand->season());
-			$match = new Match($uuid, $ht,$gt, $se, $matchCommand->round(), $m->date, $m->departure, $m->id);
+			$match = new Match($uuid, $ht, $gt, $se, $matchCommand->round(), $m->date, $m->departure, $m->id);
 			$match->setHomeGoal($m->goal_home);
 			$match->setHomeGoalHalf($m->goal_home_half);
 			$match->setGuestGoal($m->goal_guest);
@@ -189,7 +189,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		// LineUp ups
-		foreach($this->db->table('line_up') as $lu) {
+		foreach ($this->db->table('line_up') as $lu) {
 			$uuid = $this->uuidFactory->uuid();
 			$team = $this->em->getRepository(Team::class)->find($teams[$lu->team_id]->id());
 			$player = $this->em->getRepository(Player::class)->find($players[$lu->player_id]->id());
@@ -203,7 +203,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		//goals
-		foreach($this->db->table('goal') as $g) {
+		foreach ($this->db->table('goal') as $g) {
 			$uuid = $this->uuidFactory->uuid();
 			$match = $this->em->getRepository(Match::class)->find($matches[$g->match_id]->id());
 			$player = $this->em->getRepository(Player::class)->find($players[$g->player_id]->id());
@@ -214,7 +214,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		//substitution
-		foreach($this->db->table('roster') as $ro) {
+		foreach ($this->db->table('roster') as $ro) {
 			$uuid = $this->uuidFactory->uuid();
 			$season = $this->em->getRepository(Season::class)->find($seasons[$ro->season_id]->id());
 			$team = $this->em->getRepository(Team::class)->find($teams[$ro->team_id]->id());
@@ -227,7 +227,7 @@ class ArticleIdToUuidCommand extends Command
 
 		// tags
 		$tags = [];
-		foreach($this->db->table('tag') as $ta) {
+		foreach ($this->db->table('tag') as $ta) {
 			$uuid = $this->uuidFactory->uuid();
 			$tag = new Tag($uuid, $ta->tag);
 			$tags[$ta->id] = $tag;
@@ -237,10 +237,10 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		$articles = [];
-		foreach($this->db->table('article') as $a) {
+		foreach ($this->db->table('article') as $a) {
 			$uuid = $this->uuidFactory->uuid();
 			/** @var \UserModule\Entity\User */
-			$user = $this->em->getRepository(User::class)->findOneBy(['email'=>$a->ref('user', 'author_id')->email]);
+			$user = $this->em->getRepository(User::class)->findOneBy(['email' => $a->ref('user', 'author_id')->email]);
 
 			$article = new Article(
 				$uuid,
@@ -251,22 +251,22 @@ class ArticleIdToUuidCommand extends Command
 				$a->release_date,
 				$a->release,
 				$user->fullName(),
-				"article/".$a->ref('image', 'image_id')->source,
+				"article/" . $a->ref('image', 'image_id')->source,
 				$user,
 				$a->match_id ? $matches[$a->match_id] : NULL
 			);
-/*
-			if(file_exists(WWW_DIR."/article/big-".$a->ref('image', 'image_id')->source)) {
-				rename(WWW_DIR . "/article/big-" . $a->ref('image', 'image_id')->source, WWW_DIR . "/storage/article/" . $a->ref('image', 'image_id')->source);
-			}
-			*/
-			if($a->match_id) {
+			/*
+						if(file_exists(WWW_DIR."/article/big-".$a->ref('image', 'image_id')->source)) {
+							rename(WWW_DIR . "/article/big-" . $a->ref('image', 'image_id')->source, WWW_DIR . "/storage/article/" . $a->ref('image', 'image_id')->source);
+						}
+						*/
+			if ($a->match_id) {
 				$articleMatch = $this->em->getRepository(Match::class)->find($matches[$a->match_id]->id());
 				$article->changeMatch($articleMatch);
 			}
 
 			$articleTags = [];
-			foreach($this->db->table('article_tag')->where('article_id', $a->id) as $at) {
+			foreach ($this->db->table('article_tag')->where('article_id', $a->id) as $at) {
 				$articleTags[] = $this->em->getRepository(Tag::class)->find($tags[$at->tag_id]->id());
 			}
 			$article->setTags($articleTags);
@@ -277,7 +277,7 @@ class ArticleIdToUuidCommand extends Command
 		}
 
 		// actuality
-		foreach($this->db->table('news') as $n) {
+		foreach ($this->db->table('news') as $n) {
 			$uuid = $this->uuidFactory->uuid();
 			$actuality = new Actuality($uuid, $n->date, $n->title, $n->text);
 			$this->em->persist($actuality);

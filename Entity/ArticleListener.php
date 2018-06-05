@@ -26,10 +26,10 @@ class ArticleListener implements Subscriber
 
 	public function __construct(
 		Invalidator $invalidator
-	){
+	)
+	{
 		$this->invalidator = $invalidator;
 	}
-
 
 
 	public function getSubscribedEvents()
@@ -40,15 +40,17 @@ class ArticleListener implements Subscriber
 		];
 	}
 
-	public function postPersist(LifecycleEventArgs $args) {
-        if($args->getEntity() instanceof Article) {
-            $this->invalidator->article($args->getEntity()->id());
-            $this->invalidator->articles();
-        }
+	public function postPersist(LifecycleEventArgs $args)
+	{
+		if ($args->getEntity() instanceof Article) {
+			$this->invalidator->article($args->getEntity()->id());
+			$this->invalidator->articles();
+		}
 	}
 
-	public function postUpdate(LifecycleEventArgs $args) {
-		if($args->getEntity() instanceof Article) {
+	public function postUpdate(LifecycleEventArgs $args)
+	{
+		if ($args->getEntity() instanceof Article) {
 			$this->invalidator->article($args->getEntity()->id());
 			$this->invalidator->articles();
 		}

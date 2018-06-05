@@ -7,6 +7,7 @@
  */
 
 namespace AdminModule;
+
 use App\Entity\Tag;
 use ArticleModule\Grids\TagGridFactory;
 use Kdyby\Doctrine\EntityManager;
@@ -16,10 +17,11 @@ use Kdyby\Doctrine\EntityManager;
  *
  * @author jirka
  */
-class TagsPresenter extends BasePresenter{
+class TagsPresenter extends BasePresenter
+{
 
 
-	/** @var TagGridFactory  */
+	/** @var TagGridFactory */
 	private $tagGridFactory;
 
 	public function __construct(
@@ -29,22 +31,23 @@ class TagsPresenter extends BasePresenter{
 		$this->tagGridFactory = $tagGridFactory;
 	}
 
-    /**
-     * @return \Ublaboo\DataGrid\DataGrid
-     */
-    public function createComponentTagGrid() {
+	/**
+	 * @return \Ublaboo\DataGrid\DataGrid
+	 */
+	public function createComponentTagGrid()
+	{
 		return $this->tagGridFactory->createGrid(
-		function(){
-			$this->flashMessage('Tag byl přidán', 'success');
-			$this->redrawControl('grid');
-			$this->redrawControl('flashMessages');
-		},
-	    function(){
-			$this->flashMessage('Tag byl upraven', 'success');
-			$this->redrawControl('grid');
-			$this->redrawControl('flashMessages');
-	    });
-    }
-            
-    
+			function () {
+				$this->flashMessage('Tag byl přidán', 'success');
+				$this->redrawControl('grid');
+				$this->redrawControl('flashMessages');
+			},
+			function () {
+				$this->flashMessage('Tag byl upraven', 'success');
+				$this->redrawControl('grid');
+				$this->redrawControl('flashMessages');
+			});
+	}
+
+
 }

@@ -21,9 +21,12 @@ interface ArticleQuery
 	 * @param UuidInterface $uuid
 	 * @return ArticleDTO
 	 */
-	public function articleFromId(UuidInterface $uuid) : ArticleDTO;
-	public function articleList($limit = NULL, $offet = NULL) : array;
-    public function articlesUriTable();
-    public function articleFromUri(string $uri) : ArticleDTO;
+	public function articleFromId(UuidInterface $uuid): ArticleDTO;
+
+	public function articleList($limit = NULL, $offet = NULL): array;
+
+	public function articlesUriTable();
+
+	public function articleFromUri(string $uri): ArticleDTO;
 
 }

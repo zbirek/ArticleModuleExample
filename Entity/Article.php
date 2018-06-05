@@ -118,13 +118,14 @@ class Article
 		string $content,
 		\DateTime $releaseDate,
 		int $release,
-        string $author,
+		string $author,
 		string $image,
 		User $createdUser,
 		Match $match = NULL,
-        int $priority = 1,
-        bool $showMain = true
-	){
+		int $priority = 1,
+		bool $showMain = true
+	)
+	{
 		$this->id = $uuid;
 		$this->title = $title;
 		$this->subtitle = $subtitle;
@@ -140,11 +141,12 @@ class Article
 		$this->tags = new ArrayCollection();
 		$this->createdAt = new DateTime();
 		$this->uri = $this->createUri($uuid, $title);
-        $this->priority = $priority;
-        $this->showMain = $showMain;
-    }
+		$this->priority = $priority;
+		$this->showMain = $showMain;
+	}
 
-	private function createUri(UuidInterface $uuid, $title) {
+	private function createUri(UuidInterface $uuid, $title)
+	{
 		return Strings::webalize("{$uuid->getNode()}-{$title}");
 	}
 
@@ -247,14 +249,16 @@ class Article
 		$this->match = $match;
 	}
 
-	public function clearMatch() {
+	public function clearMatch()
+	{
 		$this->match = NULL;
 	}
 
-	public function setTags(array $tags) {
+	public function setTags(array $tags)
+	{
 		$this->tags->clear();
 
-		foreach($tags as $tag) {
+		foreach ($tags as $tag) {
 			$this->tags[] = $tag;
 		}
 
@@ -383,16 +387,15 @@ class Article
 		return $this->uri;
 	}
 
-	public function gallery() {
+	public function gallery()
+	{
 		return NULL;
 	}
 
-	public function changeShowMain($showMain) {
-	    $this->showMain = $showMain;
-    }
-
-
-
+	public function changeShowMain($showMain)
+	{
+		$this->showMain = $showMain;
+	}
 
 
 }

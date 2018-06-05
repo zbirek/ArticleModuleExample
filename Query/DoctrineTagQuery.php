@@ -25,24 +25,24 @@ class DoctrineTagQuery implements TagQuery
 		$this->em = $em;
 	}
 
-    /**
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-	public function tagDataSource() : QueryBuilder
+	/**
+	 * @return \Doctrine\ORM\QueryBuilder
+	 */
+	public function tagDataSource(): QueryBuilder
 	{
 		return $this->em->getRepository(Tag::class)->createQueryBuilder('t');
 	}
 
-    /**
-     * @return array
-     */
+	/**
+	 * @return array
+	 */
 	public function arrayTag()
 	{
 		$result = $this->em->getRepository(Tag::class)->findAll();
 
 		$tags = [];
 		/** @var Tag $tag */
-		foreach($result as $tag) {
+		foreach ($result as $tag) {
 			$tags[$tag->id()->toString()] = $tag->tag();
 		}
 

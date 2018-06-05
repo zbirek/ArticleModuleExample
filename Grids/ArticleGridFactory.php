@@ -26,20 +26,22 @@ class ArticleGridFactory extends DataGrid
 	public function __construct(
 		GridFactory $gridFactory,
 		ArticleQuery $articleQuery
-	){
+	)
+	{
 		$this->gridFactory = $gridFactory;
 		$this->articleQuery = $articleQuery;
 	}
 
 
-	public function createGrid() {
+	public function createGrid()
+	{
 		$grid = $this->gridFactory->create();
 
 
 		$grid->setDataSource($this->articleQuery->articleDataSource());
 
 		$grid->setDefaultPerPage(30);
-		$grid->setDefaultSort(['releaseDate'=>'DESC']);
+		$grid->setDefaultSort(['releaseDate' => 'DESC']);
 
 		$grid->addColumnText('title', 'Titulek')
 			->setSortable()
@@ -53,29 +55,29 @@ class ArticleGridFactory extends DataGrid
 			->setFilterText();
 
 		$grid->addColumnStatus('release', 'Vydáno')
-				->addOption(1, 'Vydáno')
-					->setClass('btn-primary')
-					->endOption()
-				->addOption(0, 'Nevydáno')
-					->setClass('btn-danger')
-					->endOption()
-				->onChange[] = function($id, $status) {
-						$this->changeStatus($id, $status);
-				};
+			->addOption(1, 'Vydáno')
+			->setClass('btn-primary')
+			->endOption()
+			->addOption(0, 'Nevydáno')
+			->setClass('btn-danger')
+			->endOption()
+			->onChange[] = function ($id, $status) {
+			$this->changeStatus($id, $status);
+		};
 
 
 		$grid->addAction('editArticle', '')
-				->setTitle('Upravit článek')
-				->setIcon('edit')
-				->setTitle('upravit článek')
-				->setClass('btn btn-success');
+			->setTitle('Upravit článek')
+			->setIcon('edit')
+			->setTitle('upravit článek')
+			->setClass('btn btn-success');
 
 		$grid->addAction('deleteArticle', '')
-				->setTitle('Smazat článek')
-				->setIcon('trash')
-				->setTitle('Smazat článek')
-				->setClass('btn btn-danger ajax')
-				->setConfirm('Opravdu chcete smazat článek %s?', 'title');
+			->setTitle('Smazat článek')
+			->setIcon('trash')
+			->setTitle('Smazat článek')
+			->setClass('btn btn-danger ajax')
+			->setConfirm('Opravdu chcete smazat článek %s?', 'title');
 
 		$grid->addToolbarButton('Tags:default', 'Tagy')
 			->setIcon('tag')

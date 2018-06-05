@@ -16,7 +16,9 @@ use ArticleModule\Command\ModifyArticleCommand;
 interface ArticleService
 {
 	public function createArticle(CreateArticleCommand $command): void;
-	public function modifyArticle(ModifyArticleCommand $command): void;
-    public function deleteArticle(DeleteArticleCommand $command): void;
 
-    }
+	public function modifyArticle(ModifyArticleCommand $command): void;
+
+	public function deleteArticle(DeleteArticleCommand $command): void;
+
+}

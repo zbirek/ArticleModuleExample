@@ -34,7 +34,8 @@ class DoctrineTagService implements TagService
 		$this->em->flush();
 	}
 
-	public function modifyTag(ModifyTagCommand $command) {
+	public function modifyTag(ModifyTagCommand $command)
+	{
 		$tag = $this->em->getRepository(Tag::class)->find($command->id());
 
 		$tag->changeTag($command->tag());

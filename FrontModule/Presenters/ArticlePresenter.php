@@ -27,38 +27,42 @@ class ArticlePresenter extends BasePresenter
 	private $matchInfoControlFactory;
 
 	public $matchId;
-    /**
-     * @var IArticleListFactory
-     */
-    private $articleListFactory;
+	/**
+	 * @var IArticleListFactory
+	 */
+	private $articleListFactory;
 
-    public function __construct(
-	    UuidFactory $uuidFactory,
-        ArticleQuery $articleQuery,
-        MatchInfoControlFactory $matchInfoControlFactory,
-        IArticleListFactory $articleListFactory
-    ){
+	public function __construct(
+		UuidFactory $uuidFactory,
+		ArticleQuery $articleQuery,
+		MatchInfoControlFactory $matchInfoControlFactory,
+		IArticleListFactory $articleListFactory
+	)
+	{
 		$this->uuidFactory = $uuidFactory;
 		$this->articleQuery = $articleQuery;
 		$this->matchInfoControlFactory = $matchInfoControlFactory;
-        $this->articleListFactory = $articleListFactory;
-    }
+		$this->articleListFactory = $articleListFactory;
+	}
 
-	public function actionDefault($slug) {
+	public function actionDefault($slug)
+	{
 		$article = $this->articleQuery->articleFromUri($slug);
 		$this->template->article = $article;
 
-		$this->template->matchInfo = function($matchId) {
-		    $this->matchId = $matchId;
+		$this->template->matchInfo = function ($matchId) {
+			$this->matchId = $matchId;
 			$this->createComponent('matchInfo');
 		};
 	}
 
-	public function createComponentMatchInfo() {
+	public function createComponentMatchInfo()
+	{
 		return $this->matchInfoControlFactory->create($this->matchId);
 	}
 
-	public function createComponentArticleList() {
-        return $this->articleListFactory->create(5);
-    }
+	public function createComponentArticleList()
+	{
+		return $this->articleListFactory->create(5);
+	}
 }
