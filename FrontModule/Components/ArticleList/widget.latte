@@ -1,0 +1,19 @@
+<div class="box" id="article-widget">
+    <div class="box-header">
+        <h2>Aktuálně na webu</h2>
+    </div>
+    <div class="box-content article-widget">
+        {foreach $articles as $article}
+                <a href="{plink Article:default $article->uri()}">
+
+                    <div class="col-md-12 col-sm-12">
+                        <div class="item">
+                            <span class="sub-title">{$article->subtitle()}</span>
+                            <span class="title">{$article->title()}</span>
+                        </div>
+                    </div>
+                </a>
+        {/foreach}
+
+    </div>
+</div>

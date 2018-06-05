@@ -1,0 +1,33 @@
+services:
+    - ArticleModule\Forms\ArticleFormFactory
+    - ArticleModule\Grids\ArticleGridFactory
+    - ArticleModule\Grids\TagGridFactory
+
+    -
+        class: ArticleModule\Query\ArticleQuery
+        factory: ArticleModule\Query\DoctrineArticleQuery
+
+    -
+        class: ArticleModule\Query\TagQuery
+        factory: ArticleModule\Query\DoctrineTagQuery
+
+    articleService:
+        class: ArticleModule\Service\ArticleService
+        factory: ArticleModule\Service\DoctrineArticleService
+
+    tagService:
+        class: ArticleModule\Service\TagService
+        factory: ArticleModule\Service\DoctrineTagService
+
+    ArticleIdConvertCommand:
+        class: RosterModule\Console\Command\ArticleIdToUuidCommand
+        tags: [kdyby.console.command]
+
+#frontendModule
+    - ArticleModule\Component\IArticleListFactory
+
+    ArticleListener:
+        class: ArticleModule\Entity\ArticleListener
+        tags: [kdyby.subscriber]
+
+    - ArticleModule\Service\ArticleFacade

@@ -1,0 +1,216 @@
+{block content}
+
+	<ol class="breadcrumb">
+		<li><a n:href="Default:default"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+		<li><a n:href="Article:allArticle">Články</a></li>
+		<li class="active">Přidání článku</li>
+
+	</ol>
+
+	<h2>Přidání článku</h2>
+	<div class="row">
+	{snippet form}
+	{form addArticleForm data-persist=>''}
+		<ul class="alerts alert-danger" n:if="$form->hasErrors()">
+			<li n:foreach="$form->errors as $error">{$error}</li>
+		</ul>
+
+		<div class="col-md-9">
+			<div class="box box-primary">
+				<div class="box-body">
+					<div>
+						{label title /}
+						{input title}
+					</div>
+
+
+					{label subtitle /}
+					{input subtitle}
+
+					{label perex /}
+					{input perex}
+
+					{label content /}
+					{input content}
+
+					{label tags /}
+					{input tags}
+				</div>
+			</div>
+		</div>
+
+		</div>
+		<div class="col-md-3">
+
+			<div class="control-group">
+
+				<div class="box box-primary">
+					<div class="box-header">
+						<h3 class="box-title">Nastavení článku</h3>
+					</div>
+					<div class="box-body">
+                        {label releaseDate /} <br>
+						<div class="input-group">
+							<div class="input-group-addon">
+								<i class="fa fa-calendar"></i>
+							</div>
+							<input class="form-control datepicker" n:name="releaseDate" type="text">
+						</div>
+
+						<div class="radio">
+                            {label release /} <br>
+                            {input release} <br>
+						</div>
+						<div class="checkbox">
+                            {input showMain}  {label showMain /} <br>
+						</div>
+						<div class="">
+                            {label priority/}
+                            {input priority}
+
+						</div>
+
+                        {label author /}
+                        {input author}
+					</div>
+				</div>
+
+				<div class="box box-primary">
+					<div class="box-header">
+						<h3 class="box-title">Obrázek ke článku</h3>
+					</div>
+					<div class="box-body">
+						{input image}
+						<div class="img-thumb"></div><br><br>
+						<button type="button" class="btn btn-primary btn-lg iframe-btn" data-toggle="modal" data-target="#myModal">
+							Vybrat obrázek
+						</button>
+						<br><br>
+						<span>Nahrát nový obrázek</span>
+						{input uploadImage}
+					</div>
+				</div>
+
+				<div class="box box-primary">
+					<div class="box-header">
+						<h3 class="box-title">Přidat zápas ke článku</h3>
+					</div>
+					<div class="box-body">
+						{label match /}
+						{input match}
+					</div>
+				</div>
+
+				<div class="box box-primary">
+					<div class="box-header">
+						<h3 class="box-title">Přidat galerii ke článku</h3>
+					</div>
+					<div class="box-body">
+						{label gallery /}
+						{input gallery}
+					</div>
+				</div>
+
+				</div>
+			</div> <!-- .col-md-3 -->
+		</div> <!-- .row -->
+		<div class="row">
+		<div class="col-md-12">
+			<div class="box box-solid">
+				<div class="box-footer">
+					{input save}
+					{input saveStay}
+				</div>
+			</div>
+		</div>
+	<br>
+
+
+	{/form}
+		<!-- Modal -->
+		<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Výběr obrázku</h4>
+					</div>
+					<div class="modal-body">
+						<iframe width="880" height="550" frameborder="0" src="/filemanager/dialog.php?lang=cs&type=1&field_id=image-url&crossdomain=1&relative_url=1&fldr=article"> </iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			{*include #jsCallback, input => season, link => matchChange*}
+
+		</script>
+	{/snippet}
+
+
+	</div>
+	</div> <!-- row -->
+	<div class="row">
+		<div class="col-md-12">
+
+		</div>
+	</div>
+{/block}
+
+{*define #jsCallback}
+
+
+
+{/define}
+*}
+{block scripts}
+
+	<script type="text/javascript" src="{$basePath}/js/ckeditor/ckeditor.js"></script>
+
+	<script type="text/javascript">
+
+
+		$(document).ready(function () {
+			CKEDITOR.replace('frm-addArticleForm-content', {
+				'height' : 400,
+                filebrowserBrowseUrl : '/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
+                filebrowserUploadUrl : '/filemanager/dialog.php?type=2&editor=ckeditor&fldr=article',
+                filebrowserImageBrowseUrl : '/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+			});
+
+			$('.iframe-btn').on('click',function(){
+				$(window).on('message', OnMessage);
+			});
+
+			//$('form').garlic();
+
+			function OnMessage(e){
+				var event = e.originalEvent;
+
+				// Make sure the sender of the event is trusted
+				if(event.data.sender === 'responsivefilemanager'){
+					if(event.data.field_id){
+						var fieldID=event.data.field_id;
+						console.log(fieldID);
+						var url=event.data.url;
+						$('#'+fieldID).val(url).trigger('change');
+						$('.img-thumb').empty();
+						var imageUrl = {$basePath}+"/storage/"+url;
+						$('.img-thumb').prepend('<img class="img-responsive" src='+imageUrl+' />');
+						$("#myModal").modal('hide');
+
+						// Delete handler of the message from ResponsiveFilemanager
+						$(window).off('message', OnMessage);
+					}
+				}
+			}
+
+
+		});
+
+	</script>
+
+
+{/block}

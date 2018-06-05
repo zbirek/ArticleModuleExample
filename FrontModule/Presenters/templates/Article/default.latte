@@ -1,0 +1,71 @@
+{php
+    $title = $article->title();
+    $type = 'article';
+    $description = $article->perex();
+    $img  = "http://fcvelkabites.com/min.php?file=".$basePath."/storage/".$article->image()."&exact&w=1200&h=660";
+}
+{capture $url}{link //Article:default $article->uri()}{/capture}
+
+{block content}
+<div class="container subpage">
+    <div class="row">
+        <div class="col-md-3">
+            {if $article->match()}
+                <div class="box">
+                    <div class="box-primary"></div>
+                        <div class="box-content">
+                                {$matchInfo($article->match()->id())}
+                                {control matchInfo:widget}
+                        </div>
+                </div>
+            {else}
+                {control articleList:widget}
+            {/if}
+        </div>
+
+        <div class="col-md-9">
+         <section id="article">
+
+                <div class="news-item">
+                        <span class="bg"></span>
+                        <img src="/min.php?file={$basePath}/storage/{$article->image()}&exact&w=1170&h=600"
+                             class="img-responsive">
+                </div>
+                <div class="article-text">
+                    <div class="subtitle">{$article->subtitle()}</div>
+                    <h2>{$article->title()}</h2>
+                    <p><strong>{$article->perex()}</strong></p>
+
+                    {if $article->match()}
+                        {$matchInfo($article->match()->id())}
+                        {control matchInfo:text}
+                    {/if}
+
+                    {$article->content()|noescape}
+                </div>
+
+             <div class="article-footer">
+                 <div class="row">
+                     <div class="article-info">
+                         <div class="col-md-8">
+                         <strong>Datum vydání: </strong>{$article->releaseDate()|date:"j.n.Y"} | <strong>Autor:</strong> {$article->author()}
+                         </div>
+                     </div>
+                     <div class="col-md-4">
+                         <div class="share pull-right">
+                             {*
+                             <a href="" class=""><span class="fa fa-facebook"></span></a>
+                             <a href="" class=""><span class="fa fa-twitter"></span></a>
+                             *}
+                             <a href="#" onclick="window.print()" class=""><span class="fa fa-print"></span></a>
+                         </div>
+
+                     </div>
+                 </div>
+             </div>
+
+         </section>
+        </div>
+    </div>
+</div>
+{/block }

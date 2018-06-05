@@ -1,0 +1,16 @@
+<div class="other-articles">
+    {foreach $articles as $article}
+        <div class="col-md-3">
+            <div class="col-md-12 col-sm-12">
+                <a href="{plink Article:default $article->uri()}">
+                    <div class="item">
+                        <img src="/min.php?file={$basePath}/storage/{$article->image()}&exact&w=400&h=214" class="img-responsive">
+                        <span class="subtitle">{$article->subtitle()}</span><br>
+                        <span class="title">{$article->title()}</span>
+                        <p>{$article->perex()|truncate:130}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {/foreach}
+</div>

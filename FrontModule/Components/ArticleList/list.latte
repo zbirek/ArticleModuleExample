@@ -1,0 +1,38 @@
+<div id="top-article">
+{if $topArticle}
+	<div class="col-md-8 col-sm-12">
+		<div class="top-story">
+			<a href="{plink Article:default 'slug'=>$topArticle->uri()}">
+				<div class="col-md-12 col-sm-12">
+					<img src="/min.php?file={$basePath}/storage/{$topArticle->image()}&exact&w=933&h=520"
+						 srcset="/min.php?file={$basePath}/storage/{$topArticle->image()}&exact&w=600&h=400 600w /min.php?file={$basePath}/storage/{$topArticle->image()}&exact&w=600&h522 1600w"
+						 class="img-responsive">
+					<div class="prefix">
+						<span class="sub-title">{$topArticle->subtitle()}</span>
+						<h1>{$topArticle->title()}</h1>
+						<p>{$topArticle->perex()}</p>
+					</div>
+
+				</div>
+			</a>
+		</div>
+	</div> <!-- .col-md-8 -->
+{/if}
+	<div class="col-md-4 col-sm-12">
+        {foreach $articles as $article}
+		<div class="story">
+			<a href="{plink Article:default 'slug'=>$article->uri()}">
+				<div class="col-md-12 col-sm-12">
+					<img src="/min.php?file={$basePath}/storage/{$article->image()}&exact&w=466&h=260" class="img-responsive">
+					<div class="prefix">
+						<span class="sub-title">{$article->subtitle()}</span>
+						<h2>{$article->title()}</h2>
+					</div>
+
+				</div>
+			</a>
+		</div> <!-- story -->
+		{/foreach}
+
+	</div>
+</div> <!-- top-article -->
