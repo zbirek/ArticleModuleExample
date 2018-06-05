@@ -5,6 +5,7 @@ namespace AdminModule;
 use AdminModule\Components\ArticleForm;
 use AdminModule\Components\ArticleListGrid;
 use AdminModule\Components\IArticleImageControlFactory;
+use ArticleModule\Command\DeleteArticleCommand;
 use ArticleModule\Entity\Article;
 use App\Entity\Image;
 use App\Service\ArticleService;
@@ -191,28 +192,6 @@ class ArticlePresenter extends DefaultPresenter
 		return $form;
 	}
 
-	/**
-	 *
-	 */
-	public function handleChangeSeason($value)
-	{
-		$matches = $this['addArticle']->getMatches($value);
-
-		$this['addArticle']['idmatch']->setPrompt('Vyber sezonu')
-			->setItems($matches);
-
-		$this->redrawControl('match');
-	}
-
-
-	/**
-	 * Render pro vykresleni vsech clanku
-	 *
-	 */
-	public function renderAllArticle()
-	{
-
-	}
 
 	public function createComponentArticleList()
 	{
@@ -222,38 +201,7 @@ class ArticlePresenter extends DefaultPresenter
 			$this->articleService->setRelease($id, $status);
 		};
 
-
 		return $grid;
-	}
-
-	/**
-	 * Signal pro nezobrazeni clanku
-	 * @param int $id id clanku
-	 */
-	public function handleShowArticle($id, $value)
-	{
-		$this->updateArticle(array('release' => ($value ? 0 : 1)), $id);
-
-		$this->flashMessage($value ? 'Článek byl stažen' : 'Článek zobrazen', 'success');
-
-		if ($this->isAjax()) {
-			$this->invalidateControl('articles');
-		} else {
-			redirect('this');
-		}
-
-	}
-
-
-	/**
-	 * Metoda pro upravu clanku
-	 * @param array $data data pro upravu
-	 * @param int $name Description
-	 */
-	public function updateArticle(array $data, $id)
-	{
-		$this->articleRepository->findBy(array('id_article' => $id))->update($data);
-
 	}
 
 	/**
@@ -262,12 +210,12 @@ class ArticlePresenter extends DefaultPresenter
 	 */
 	public function actionDeleteArticle($id)
 	{
-		$article = $this->em->getRepository(Article::class)->find($id);
-		$this->em->remove($article);
-		$this->em->flush();
+		$uuid = $this->uuidFactory->uuidFromString($id);
+		$command = new DeleteArticleCommand($uuid);
 
-		$this['articleGrid']->reloaOd(['grid', 'flashMessages']);
-		$this->terminate();
+		$this->commandBus->handle($command);
+		$this->flashMessage('Článek byl smazán', 'success');
+		$this->redirect('default');
 	}
 
 
@@ -297,17 +245,6 @@ class ArticlePresenter extends DefaultPresenter
 
 		$result = $uploader->handleUpload(WWW_DIR . '/images/article');
 		$this->sendResponse(new JsonResponse($result));
-	}
-
-	public function chooseImage($image)
-	{
-		$this->selectedImage = $image;
-		$this['addArticle']['image']->setValue($image->getId());
-		$this->closeModal = TRUE;
-
-		$this->redrawControl('scripts');
-		$this->redrawControl('image');
-
 	}
 
 
